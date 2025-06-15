@@ -4,11 +4,13 @@ const http = require('http');
 const app = express();
 const server = http.createServer(app);
 const { Server } = require('socket.io');
-const io = new Server(server, {
+const io = require("socket.io")(server, {
   cors: {
-    origin: '*',
-  },
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
 });
+
 io.on('connection', (socket) => {
   socket.on('send_message', (msg) => {
     console.log(msg);

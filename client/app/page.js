@@ -9,7 +9,7 @@ export default function Home() {
   const [chat, setChat] = useState([]);
   const [typing, setTyping] = useState([]);
   const [input, setInput] = useState("");
-  const socket = useRef(io("http://localhost:3001"));
+  const socket = useRef(io("https://chat-n6om.onrender.com"));
   const user = useRef(null);
 
   useEffect(() => {
