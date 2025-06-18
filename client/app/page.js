@@ -2,6 +2,7 @@
 import { useRef, useState, useEffect } from "react";
 import io from "socket.io-client";
 import Chat from "@/components/Chat";
+
 import Inputs from "@/components/Inputs";
 import SignUp from "@/components/SignUp";
 
