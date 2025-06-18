@@ -15,16 +15,17 @@ io.on('connection', (socket) => {
   socket.on('send_message', (msg) => {
     console.log(msg);
     socket.broadcast.emit('receive_message', msg);
-
-  })
-    socket.on("user_typing",(data)=>{
+  });
+  socket.on("user_typing", (data) => {
     socket.broadcast.emit("user_typing", data);
-  })
+  });
   socket.on('new_user', (data) => {
     socket.broadcast.emit('new_user', data.user.name);
-    
   });
 });
-server.listen(3001, () => {
-  console.log('Server is running on http://localhost:3001');
+
+// Use environment variable for port, fallback to 3001
+const PORT = process.env.PORT || 3001;
+server.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
