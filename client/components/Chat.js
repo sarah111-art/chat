@@ -27,7 +27,7 @@ const Message = ({ content, own, type }) => {
     <p className={`message px-6 py-1 flex ${own ? 'justify-end' : 'justify-start'} items-center`}>
       <span className={`text-3xl py-2 rounded-2xl 
         ${type === "text" ? "px-6" : "px-2"}
-        ${own ? "bg-sky-400 text-white" : "bg-slate-200"}`}>
+        ${own ? "bg-sky-400 text-white" : "bg-slate-200 text-sky-400"}`}>
         {
           type === "text"
             ? content
@@ -41,7 +41,7 @@ const Message = ({ content, own, type }) => {
 const Typing = ({ users }) => {
   return users.map((user, index) => (
     <div key={index} className="px-6 py-1 flex">
-      <span className="bg-blue-600 text-white rounded-full py-2 my-auto text-center px-4 mr-2 flex items-center">
+      <span className="bg-blue-300 text-blue-600 rounded-full py-2 my-auto text-center px-4 mr-2 flex items-center">
         {user.name?.charAt(0).toUpperCase()}
       </span>
       <div className="loader bg-slate-300 rounded-2xl p-5 flex gap-1">
