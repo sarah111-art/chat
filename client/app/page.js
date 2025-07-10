@@ -1,8 +1,7 @@
-"use client"; 
+"use client";
 import { useRef, useState, useEffect } from "react";
 import io from "socket.io-client";
 import Chat from "@/components/Chat";
-
 import Inputs from "@/components/Inputs";
 import SignUp from "@/components/SignUp";
 
@@ -29,16 +28,14 @@ export default function Home() {
     });
 
     socket.current.on("user_typing", (data) => {
-  if (!data.typing) return; // ✅ Chỉ hiển thị nếu đang gõ
-
-  setTyping((prev) => {
-    if (!prev.find((u) => u.id === data.user.id)) {
-      return [...prev, data.user];
-    }
-    return prev;
-  });
-});
-
+      if (!data.typing) return;
+      setTyping((prev) => {
+        if (!prev.find((u) => u.id === data.user.id)) {
+          return [...prev, data.user];
+        }
+        return prev;
+      });
+    });
 
     socket.current.on("user_stop_typing", (u) => {
       setTyping(prev => prev.filter((user) => user.id !== u.id));
@@ -47,47 +44,33 @@ export default function Home() {
     return () => socket.current.disconnect();
   }, []);
 
-return (
-  <main className="h-screen max-h-screen max-w-screen mx-auto bg-white text-gray-900">
-    {user.current?.name && user.current?.id ? (
-      <div className="flex h-full w-full">
-        {/* Sidebar trái */}
-        <aside className="hidden md:flex flex-col w-[280px] bg-white border-r shadow-sm">
-          <div className="p-4 font-bold text-xl border-b">Zalo Chat</div>
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            {/* Danh sách bạn */}
-            <div className="flex items-center gap-3 cursor-pointer hover:bg-gray-100 p-2 rounded">
-              <div className="w-10 h-10 bg-blue-400 rounded-full flex items-center justify-center text-white font-bold">P</div>
-              <div className="font-medium">Phát Võ</div>
-            </div>
-            {/* ... thêm bạn khác nếu có */}
-          </div>
-        </aside>
-
-        {/* Khung chat chính */}
-        <div className="flex flex-col flex-1">
+  return (
+    <main className="h-screen max-h-screen max-w-screen mx-auto bg-white text-gray-900">
+      {user.current?.name && user.current?.id ? (
+        <div className="flex flex-col h-full w-full">
           {/* Header */}
-          <div className="h-[60px] px-4 border-b flex items-center justify-between bg-white shadow">
-            <div className="font-semibold text-lg">Nguyễn Tiết Xuân Quý</div>
-            {/* Avatar bên phải */}
-            <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center text-xs">N</div>
+          <div className="h-[60px] px-6 border-b flex items-center justify-between bg-white shadow">
+            <div className="font-semibold text-lg">
+              Xin chào, {user.current.name}
+            </div>
+            <div className="w-9 h-9 bg-blue-400 rounded-full flex items-center justify-center text-white text-sm font-bold">
+              {user.current.name.charAt(0).toUpperCase()}
+            </div>
           </div>
 
           {/* Nội dung chat */}
-          <div className="flex-1 overflow-y-auto bg-blue-100">
+          <div className="flex-1 overflow-y-auto px-4 py-4 bg-blue-50">
             <Chat user={user.current} chat={chat} typing={typing} />
           </div>
 
           {/* Nhập tin nhắn */}
-          <div className="px-4 py-3 bg-white border-t">
+          <div className="px-4 py-3 bg-white border-t shadow-sm">
             <Inputs user={user.current} socket={socket.current} setChat={setChat} />
           </div>
         </div>
-      </div>
-    ) : (
-      <SignUp user={user} socket={socket.current} input={input} setInput={setInput} />
-    )}
-  </main>
-);
-
+      ) : (
+        <SignUp user={user} socket={socket.current} input={input} setInput={setInput} />
+      )}
+    </main>
+  );
 }

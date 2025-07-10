@@ -7,7 +7,7 @@ const Inputs = ({ user, socket, setChat }) => {
   const uploadInput = useRef(null);
 
   const sendMessage = () => {
-    if (input) {
+    if (input.trim()) {
       const msg = { content: input, type: "text", user };
       socket.emit("send_message", msg);
       setChat(prev => [...prev, msg]);
@@ -33,33 +33,43 @@ const Inputs = ({ user, socket, setChat }) => {
   };
 
   const userTyping = (e) => {
-  const value = e.target.value;
-  setInput(value);
-
-  if (value.length > 0) {
-    socket.emit("user_typing", { user, typing: true });
-  } else {
-    socket.emit("user_typing", { user, typing: false }); // Hoặc emit "user_stop_typing"
-  }
-};
-
+    const value = e.target.value;
+    setInput(value);
+    socket.emit("user_typing", { user, typing: value.length > 0 });
+  };
 
   return (
-    <div className="w-full absolute bottom-0 text-xl grid grid-cols-5 
-        gradient md:bg-none md:text-3xl md:flex md:justify-center md:relative">
-      <input className="focus:outline-none rounded-2xl p-3 text-black placeholder-slate-200 
-            col-span-4 gradient md:w-6/12 md:mr-3"
-        type="text"
-        placeholder="Enter your message"
-        value={input}
-        onChange={userTyping}
-        onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-      />
-      <input className='hidden' type="file" ref={uploadInput} onChange={handleImageUpload} />
-      <button onClick={sendMessage} className="w-full py-2 px-3 bg-sky-400 text-black
-            font-bold rounded-md text-xl gradient md:w-1/12 md:text-2xl">
-        <Image src={input ? send : upload} alt="sent" className='w-6 md:w-12 mx-auto' height={20} width={20} />
-      </button>
+    <div className="w-full p-3 bg-white border-t border-gray-200 fixed bottom-0 md:static">
+      <div className="max-w-4xl mx-auto flex items-center gap-2">
+        <input
+          type="text"
+          placeholder="Nhập tin nhắn..."
+          value={input}
+          onChange={userTyping}
+          onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+          className="flex-1 px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
+        />
+
+        <input
+          type="file"
+          ref={uploadInput}
+          onChange={handleImageUpload}
+          className="hidden"
+        />
+
+        <button
+          onClick={sendMessage}
+          className="bg-blue-500 hover:bg-blue-600 transition text-white p-3 rounded-full"
+          title={input ? "Gửi tin nhắn" : "Tải ảnh"}
+        >
+          <Image
+            src={input ? send : upload}
+            alt="send"
+            width={24}
+            height={24}
+          />
+        </button>
+      </div>
     </div>
   );
 };
